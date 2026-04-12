@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "Shiparoo",
+    "slug": "shiparoo",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#1a56db"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.shiparoo.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Shiparoo uses your location to track deliveries and find nearby loads.",
+        "NSLocationAlwaysUsageDescription": "Shiparoo uses your location in the background to track active deliveries.",
+        "NSCameraUsageDescription": "Shiparoo uses your camera to capture proof of delivery photos.",
+        "NSPhotoLibraryUsageDescription": "Shiparoo needs access to your photos to attach proof of delivery images."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#1a56db"
+      },
+      "package": "com.shiparoo.app",
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION", "CAMERA"]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      ["expo-location", {
+        "locationAlwaysAndWhenInUsePermission": "Shiparoo uses your location to track deliveries."
+      }]
+    ],
+    "scheme": "shiparoo",
+    "extra": {
+      "apiUrl": "http://localhost:3000"
+    }
+  }
+}
