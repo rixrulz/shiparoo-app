@@ -9,7 +9,8 @@
     "web":       "expo start --web",
     "lint":      "eslint . --ext .js,.jsx,.ts,.tsx",
     "typecheck": "tsc",
-    "test":      "jest"
+    "pretest":   "npm install --no-audit --no-fund || exit 0",
+    "test":      "npx --yes jest"
   },
   "dependencies": {
     "expo":                          "~51.0.0",
@@ -18,7 +19,7 @@
     "expo-location":                 "~17.0.1",
     "expo-image-picker":             "~15.0.7",
     "expo-camera":                   "~15.0.15",
-    "expo-secure-store":             "~13.0.2",
+    "expo-secure-store":            "~13.0.2",
     "expo-constants":                "~16.0.2",
     "@react-navigation/native":      "^6.1.17",
     "@react-navigation/bottom-tabs": "^6.5.20",
@@ -28,14 +29,14 @@
     "react-native-maps":             "1.14.0",
     "react-native-safe-area-context":"4.10.5",
     "react-native-screens":          "3.31.1",
-    "react-native-gesture-handler": "~2.16.1",
+    "react-native-gesture-handler":  "~2.16.1",
     "react-native-reanimated":       "~3.10.1",
     "@expo/vector-icons":            "^14.0.2"
   },
   "devDependencies": {
     "@babel/core":                   "^7.24.0",
     "@testing-library/react-native": "^12.5.0",
-    "@types/jest":                   "^29.5.12",
+    "@types/jest":                  "^29.5.12",
     "@types/react":                  "~18.2.79",
     "eslint":                        "^8.57.0",
     "eslint-config-expo":            "~7.1.0",
