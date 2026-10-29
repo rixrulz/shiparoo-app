@@ -245,10 +245,23 @@ async function main() {
     let bidId = null;
 
     await step('carrier places a bid (POST /api/v1/bids)', async () => {
-      const res = await api('POST', '/api/v1/bids', {
+      const placeBid = () => api('POST', '/api/v1/bids', {
         token: carrierToken,
         body: { loadId, amountCents: bidAmountCents },
       });
+      let res = await placeBid();
+      // New carriers start in FMCSA review and may not bid (403 CARRIER_NOT_APPROVED).
+      // In production approval comes from FMCSA/Stripe onboarding; a test stack can
+      // supply APPROVE_CARRIER_CMD (run with CARRIER_EMAIL set) to approve the test carrier.
+      if (res.status === 403 && res.json?.error?.code === 'CARRIER_NOT_APPROVED' && process.env.APPROVE_CARRIER_CMD) {
+        const { execSync } = await import('node:child_process');
+        execSync(process.env.APPROVE_CARRIER_CMD, {
+          env: { ...process.env, CARRIER_EMAIL: carrier.email },
+          stdio: 'ignore',
+          shell: '/bin/sh',
+        });
+        res = await placeBid();
+      }
       expect(res.ok, 'place bid failed', `HTTP ${res.status} ${res.text.slice(0, 300)}`);
       bidId = unwrap(res.json, 'bid')?.id ?? res.json?.id ?? null;
     });
