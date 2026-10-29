@@ -2,6 +2,8 @@
 module.exports = {
   root: true,
   extends: ['expo'],
+  // React Native provides timers and URL APIs as globals (like a browser)
+  env: { browser: true, es2021: true },
   ignorePatterns: ['.expo/', 'coverage/'],
   settings: {
     'import/resolver': {
