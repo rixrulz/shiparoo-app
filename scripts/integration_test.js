@@ -127,29 +127,43 @@ async function main() {
   };
 
   const day = 24 * 60 * 60 * 1000;
-  const pickupDate = new Date(Date.now() + 7 * day).toISOString().slice(0, 10);
-  const deliveryDate = new Date(Date.now() + 9 * day).toISOString().slice(0, 10);
 
   // Mirrors buildPayload() in src/screens/shipper/PostLoadScreen.js
+  // Matches the API contract in shiparoo-backend src/routes/loads.js (createLoadBody).
+  // NOTE: src/screens/shipper/PostLoadScreen.js still builds the older shape
+  // (zip/date fields, no lat/lon, weight/offeredRateCents) - tracked separately.
+  const at = (days, hour) => {
+    const d = new Date(Date.now() + days * day);
+    d.setUTCHours(hour, 0, 0, 0);
+    return d.toISOString();
+  };
   const loadPayload = {
+    title: 'Integration test load',
+    equipmentType: 'dry_van',
+    commodity: 'General Freight',
+    weightLbs: 10000,
+    lengthFt: 48,
+    pieceCount: 1,
+    hazmat: false,
     originAddress: '100 Integration Test Rd',
     originCity: 'Austin',
     originState: 'TX',
     originZip: '78701',
+    originLat: 30.2672,
+    originLon: -97.7431,
+    pickupEarliest: at(7, 8),
+    pickupLatest: at(7, 17),
     destAddress: '200 Integration Test Ave',
     destCity: 'Dallas',
     destState: 'TX',
     destZip: '75201',
-    pickupDate,
-    deliveryDate,
-    equipmentType: 'dry_van',
-    weight: 10000,
-    offeredRateCents: 250000,
-    commodity: 'General Freight',
-    pieces: 1,
-    length: 48,
-    notes: 'Temporary load created by scripts/integration_test.js',
-    hazmat: false,
+    destLat: 32.7767,
+    destLon: -96.797,
+    deliveryEarliest: at(9, 8),
+    deliveryLatest: at(9, 17),
+    pricingType: 'open_bid',
+    targetRateCents: 250000,
+    specialInstructions: 'Temporary load created by scripts/integration_test.js',
   };
 
   const bidAmountCents = 235000;
