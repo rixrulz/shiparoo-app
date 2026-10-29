@@ -221,7 +221,8 @@ async function main() {
       expect(res.ok, 'carrier could not fetch the published load', `HTTP ${res.status} ${res.text.slice(0, 300)}`);
       const load = unwrap(res.json, 'load');
       expect(
-        load?.originCity === 'Austin' && load?.destCity === 'Dallas',
+        (load?.origin?.city ?? load?.originCity) === 'Austin' &&
+          (load?.destination?.city ?? load?.destCity) === 'Dallas',
         'fetched load has unexpected details',
         JSON.stringify(load).slice(0, 300),
       );
@@ -255,7 +256,7 @@ async function main() {
     await step('shipper sees the bid (GET /api/v1/loads/:id/bids)', async () => {
       const res = await api('GET', `/api/v1/loads/${loadId}/bids`, { token: shipperToken });
       expect(res.ok, 'list bids failed', `HTTP ${res.status} ${res.text.slice(0, 300)}`);
-      const bid = asArray(res.json).find((b) => Number(b?.amountCents) === bidAmountCents);
+      const bid = asArray(res.json).find((b) => Number(b?.amountCents ?? b?.amount_cents) === bidAmountCents);
       expect(bid, 'the placed bid was not found among the load bids');
       bidId = bid?.id ?? bidId;
       expect(bidId, 'the bid has no id');
